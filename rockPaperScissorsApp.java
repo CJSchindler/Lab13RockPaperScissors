@@ -2,12 +2,14 @@ package rockPaperScissors;
 
 import java.util.Scanner;
 
-public class rockPaperScissorsApp {
+public class RockPaperScissorsApp {
 
 	public static void main(String[] args) {
 
 		Scanner scnr = new Scanner(System.in);
 		Player challenger1;
+		String result = "";
+		int win = 0, loss = 0, draw = 0;
 		
 		System.out.println("Let's play Rock Paper Scissors!\n");
 		
@@ -36,16 +38,27 @@ public class rockPaperScissorsApp {
 		String cont = "y"; //keeps track of whether the player will continue or not
 		do {
 			
-			playTheGame(human, challenger1);
+			result = playTheGame(human, challenger1);
+			if (result.equals("draw")) {
+				draw++;
+			}
+			else if (result.equals("win")) {
+				win++;
+			}
+			else {
+				loss++;
+			}
 			cont = Validator.getString(scnr, "\nWould you like to play again? (y/n) ");
 			
 		} while (cont.matches("[yY].*"));
 		
+		System.out.println("Here are your final scores: ");
+		System.out.println("Wins: " + win + " Losses: " + loss + " Draws: " + draw);
 		System.out.println("\nThanks for playing! Goodbye.");
 			
 		}
 		
-	private static void playTheGame(HumanPlayer human, Player challenger) {
+	private static String playTheGame(HumanPlayer human, Player challenger) {
 		Roshambo input = human.generateRoshambo();
 		
 		Roshambo computerOutput = challenger.generateRoshambo();
@@ -54,22 +67,27 @@ public class rockPaperScissorsApp {
 		System.out.println(challenger + " played " + computerOutput);
 		System.out.println();
 		
-		showTheScore(input, computerOutput);
+		return showTheScore(input, computerOutput);
+		
 		
 	}
 
-		private static void showTheScore(Roshambo input, Roshambo computerOutput) {
+		private static String showTheScore(Roshambo input, Roshambo computerOutput) {
 
 			if (input == computerOutput) {
 				System.out.println("It's a tie!");
+				return "draw";
 			} else if ((input == Roshambo.ROCK && computerOutput == Roshambo.SCISSORS) ||
 						(input == Roshambo.PAPER && computerOutput == Roshambo.ROCK) ||
 						(input == Roshambo.SCISSORS && computerOutput == Roshambo.PAPER)) {
 				System.out.println("You win!");
+				return "win";
 			}
 			else {
 				System.out.println("Sorry, you lose!");
+				return "loss";
 			}
+			 
 		}
 
 }
